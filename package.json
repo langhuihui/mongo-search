@@ -1,0 +1,39 @@
+{
+  "name": "mongo-search",
+  "version": "1.0.0",
+  "description": "utils for mongodb to search and display",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/server/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/langhuihui/mongo-search.git"
+  },
+  "keywords": [
+    "mongodb",
+    "koa",
+    "vue",
+    "nuxt"
+  ],
+  "author": "dexter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/langhuihui/mongo-search/issues"
+  },
+  "homepage": "https://github.com/langhuihui/mongo-search#readme",
+  "dependencies": {
+    "mongodb": "^3.1.12",
+    "monquery": "^0.2.0",
+    "vue": "^2.5.22"
+  },
+  "devDependencies": {
+    "@nuxtjs/axios": "^5.3.6",
+    "consola": "^2.3.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "nuxt": "^2.3.4",
+    "pug": "^2.0.3",
+    "pug-plain-loader": "^1.0.0"
+  }
+}
