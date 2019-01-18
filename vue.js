@@ -19,13 +19,19 @@ export default {
                     type: Boolean,
                     default: true
                 },
+                search: {
+                    type: String
+                }
             },
             watch: {
                 range(v) {
-                    this.$axios.$get(this.src, this.createParams()).then(x => this.addDatas(x))
+                    this.getData()
                 },
                 src(v) {
-                    this.$axios.$get(v).then(x => this.addDatas(x))
+                    this.getData()
+                },
+                search(v) {
+                    this.getData()
                 }
             },
             computed: {
@@ -38,15 +44,15 @@ export default {
             },
             methods: {
                 createParams(args) {
-                    const { pageSize, range } = this
-                    return { params: { pageSize, range, ...args, ...this.params } }
+                    const { pageSize, range, search } = this
+                    return { params: { pageSize, search, range, ...args, ...this.params } }
                 },
                 addDatas(datas) {
                     if (this.desc) this.value.unshift.apply(this.value, datas)
                     else this.value.push.apply(this.value, datas)
                 },
                 getData() {
-                    this.$axios.$get(this.src).then(x => this.addDatas(x))
+                    this.$axios.$get(this.src, this.createParams()).then(x => this.changeValue(x))
                 },
                 changeValue(v) {
                     this.$emit('input', v)
@@ -54,11 +60,7 @@ export default {
                 getMore(next) {
                     const firstOrLast = ['last', 'first'][this.desc ^ next]
                     const beforeOrAfter = next ? 'before' : 'after'
-                    if (this[firstOrLast]) {
-                        this.$axios.$get(this.src, this.createParams({ [beforeOrAfter]: this[firstOrLast]._id })).then(x => this.addDatas(x))
-                    } else {
-                        this.getData()
-                    }
+                    this.$axios.$get(this.src, this.createParams(this[firstOrLast] ? { [beforeOrAfter]: this[firstOrLast]._id } : {})).then(x => this.addDatas(x))
                 },
                 getNext() {
                     this.getMore(true)

@@ -21,7 +21,7 @@ builder.build()
 
 MongoClient.connect("mongodb://" + (process.env.MONGODB || '127.0.0.1:27017'), { useNewUrlParser: true }).then(x => {
     let db = x.db('racing')
-    router.get('/test', require('../../index')(db.collection('round')))
+    router.get('/test', require('../../index')(db.collection('round'), 5))
     app.use(router.routes())
     app.use(router.allowedMethods())
     app.use(ctx => {

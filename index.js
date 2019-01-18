@@ -6,7 +6,8 @@ function objectIdWithTimestamp(timestamp) {
     }
     return ObjectID.createFromTime(timestamp / 1000)
 }
-module.exports = (collection, limit = 20, conditions = {}) => ({ query: { before, after, range, search, pageSize = limit } }) => {
+module.exports = (collection, limit = 20, _conditions = {}) => ({ query: { before, after, range, search, pageSize = limit } }) => {
+    const conditions = Object.assign({}, _conditions)
     if (pageSize > limit) pageSize = limit
     else {
         pageSize =
@@ -14,15 +15,13 @@ module.exports = (collection, limit = 20, conditions = {}) => ({ query: { before
     }
     if (range) {
         ([after, before] = range.split(','));
+        after = objectIdWithTimestamp(+after)
+        before = objectIdWithTimestamp(+before)
     }
     if (before || after) {
         const _id = {}
-        if (before) {
-            _id.$lt = objectIdWithTimestamp(+before)
-        }
-        if (after) {
-            _id.$gt = objectIdWithTimestamp(+after)
-        }
+        if (before) _id.$lt = typeof before == 'string' ? ObjectID(before) : before
+        if (after) _id.$gt = typeof after == 'string' ? ObjectID(after) : after
         conditions._id = _id
     }
     if (search) {
@@ -34,8 +33,11 @@ module.exports = (collection, limit = 20, conditions = {}) => ({ query: { before
                 } else {
                     conditions[key] = search[key]
                 }
+            } else {
+                conditions[key] = search[key]
             }
         }
     }
+    console.log(conditions)
     return collection.find(conditions).sort({ _id: -1 }).limit(pageSize).toArray()
 }

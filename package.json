@@ -1,6 +1,6 @@
 {
   "name": "mongo-search",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "utils for mongodb to search and display",
   "main": "index.js",
   "scripts": {
